@@ -1,0 +1,49 @@
+var model_mobilenet;
+var video;
+var loaded;
+
+function setup() {
+  createCanvas(400, 300);
+  mobilenet.load().then(modelLoaded);
+
+  video = createCapture(VIDEO);
+  video.size(400, 300);
+  video.hide();
+  
+  createButton("Take a picture").mousePressed(btnClicked);
+}
+
+function classifyDone(res) {
+  print(res);
+  if (res[0].className == "black and gold garden spider"){
+     print ("This spider is the black and gold garden spider,it is harmless for humans")
+  
+     }
+  else if (res[0].className == "barn spider"){
+    print ("This spider is the barn spider,it bite is not toxic but may cause some irritation and redness")
+  }
+  else if (res[0].className == "black widow"){
+    print ("This spider is the black widow,it bite can be painful. Anyone who is bitten needs protection from tetanus. If you haven't had a tetanus booster shot in the last five years, call your physician.")
+    
+  }
+   else {
+         print ("We didn't recognize this spider.This spider semms to be different from the black and gold garden, the barn and the black widow")
+  }
+}
+
+function modelLoaded(net) {
+  model_mobilenet = net;
+  loaded = true;
+  print("Model loaded");
+}
+
+function btnClicked() {
+  image(video, 0, 0, 400, 300);
+  if (loaded == true) {
+    model_mobilenet.classify(video.elt).then(classifyDone);
+  }
+}
+
+
+
+ <p>This project is enabling people to recognize a spider and identify it dangerousness. Indeed, in some regions of the world like in Australia, it's quite to encounter spiders. Unfortunately, it happens to be bitten by the latter. That can be stressfull, this projet identify the spider and give you information about the dangerousness and the steps to follow to to prevent it from getting wors. </p>
